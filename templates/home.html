@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Breast Cancer Detection</title>
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- jQuery and Bootstrap JS Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
+    <style>
+        body { background-color: #f8f9fa; padding-top: 30px; }
+        .card { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0 text-center">Breast Cancer Prediction Panel</h3>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- Form points directly back to the Flask app root -->
+                    <form action="/" method="POST">
+                        <div class="row">
+                            
+                            <!-- Input Fields Column -->
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label for="query1">Radius Mean</label>
+                                    <input type="number" step="any" class="form-control" id="query1" name="query1" value="{{query1}}" required autofocus>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="query2">Texture Mean</label>
+                                    <input type="number" step="any" class="form-control" id="query2" name="query2" value="{{query2}}" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="query3">Perimeter Mean</label>
+                                    <input type="number" step="any" class="form-control" id="query3" name="query3" value="{{query3}}" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="query4">Smoothness Mean</label>
+                                    <input type="number" step="any" class="form-control" id="query4" name="query4" value="{{query4}}" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="query5">Compactness Mean</label>
+                                    <input type="number" step="any" class="form-control" id="query5" name="query5" value="{{query5}}" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Button Column -->
+                            <div class="col-md-3 d-flex align-items-end mb-3">
+                                <button class="btn btn-success btn-block" type="submit">Predict</button>
+                            </div>
+                            
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <!-- Results Section -->
+                    {% if output1 %}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert {% if 'not' in output1 %}alert-info{% else %}alert-danger{% endif %} text-center" role="alert">
+                                <h4 class="alert-heading">{{ output1 }}</h4>
+                                {% if output2 %}
+                                    <p class="mb-0 font-weight-bold">{{ output2 }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
