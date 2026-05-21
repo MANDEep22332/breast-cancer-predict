@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from flask import Flask, request, render_template
 
-app = Flask(__name__)  # FIX #1: removed quotes around __name__
+app = Flask(__name__) 
 
 @app.route("/")
 def load_page():
@@ -22,7 +22,7 @@ def cancerPrediction():
     dataset_url = "https://raw.githubusercontent.com/apogiatzis/breast-cancer-azure-ml-notebook/master/breast-cancer-data.csv"
     df = pd.read_csv(dataset_url)
     
-    # FIX #2: Convert inputs to float
+    # Convert inputs to float
     inputQuery1 = float(request.form['query1'])
     inputQuery2 = float(request.form['query2'])
     inputQuery3 = float(request.form['query3'])
@@ -44,22 +44,26 @@ def cancerPrediction():
     new_df = pd.DataFrame(data, columns=features)
     
     single = model.predict(new_df)
-    proba = model.predict_proba(new_df)[:, 1]
+    proba = model.predict_proba(new_df)
     
-    # FIX #3: Check single[0] instead of single
     if single[0] == 1:
         output1 = "The patient is diagnosed with Breast Cancer"
-        output2 = "Confidence: {:.2f}%".format(proba[0] * 100)
+        # proba[0][1] is the confidence for Malignant (1)
+        output2 = "Confidence: {:.2f}%".format(proba[0][1] * 100)
     else:
         output1 = "The patient is not diagnosed with Breast Cancer"
-        output2 = ""
+        # proba[0][0] is the confidence for Benign (0)
+        output2 = "Confidence: {:.2f}%".format(proba[0][0] * 100)
     
+    # FIXED: Added output1=output1 down below
     return render_template('html.html', 
+                           output1=output1, 
                            output2=output2, 
                            query1=request.form['query1'], 
                            query2=request.form['query2'], 
                            query3=request.form['query3'], 
                            query4=request.form['query4'], 
                            query5=request.form['query5'])
+
 if __name__ == "__main__":
-    app.run( host="0.0.0.0", debug=True, use_reloader=False)
+    app.run(host="0.0.0.0", debug=True, use_reloader=False)
